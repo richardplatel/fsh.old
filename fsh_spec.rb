@@ -17,7 +17,11 @@ describe Fsh do
         it 'returns the content of the root directory' do
             root_list = ['.', '..', '/bin', '/etc', '/home', '/usr', '/var']
             Dir.stub(:entries => root_list)
-            expect(Fsh.new.ls('/')). to eq(root_list.join(' '))
+            expect(Fsh.new.ls('/')).to eq(root_list.join(' '))
+        end
+        it 'returns an error for a non-existent argument' do
+            Dir.stub(:entries) {raise Errno::ENOENT}
+            expect(Fsh.new.ls('/No/Such/Dir')).to eq("ls: /No/Such/Dir: No such file or directory")
         end
     end
 end
