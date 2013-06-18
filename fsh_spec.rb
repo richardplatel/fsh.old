@@ -23,5 +23,10 @@ describe Fsh do
             Dir.stub(:entries) {raise Errno::ENOENT}
             expect(Fsh.new.ls('/No/Such/Dir')).to eq("ls: /No/Such/Dir: No such file or directory")
         end
+        it 'returns the argument when argument is a file' do
+            File.stub(:directory? => false)
+            File.stub(:exists? => true)
+            expect(Fsh.new.ls("a_file.txt")).to eq("a_file.txt")
+        end
     end
 end

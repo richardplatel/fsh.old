@@ -4,10 +4,13 @@ class Fsh
     end
 
     def ls(dir='.')
-        begin
-            Dir.entries(dir).join(' ')
-        rescue Errno::ENOENT => e
-            "ls: "+ dir + ": No such file or directory"
+        if File.directory?(dir)
+            result = Dir.entries(dir)
+        elsif File.exists?(dir)
+            result = [dir]
+        else
+            return "ls: "+ dir + ": No such file or directory"
         end
+        return result.join(' ')
     end
 end
